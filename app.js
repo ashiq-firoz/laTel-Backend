@@ -3,11 +3,23 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
+require('dotenv').config(); // Load environment variables
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// MongoDB connection
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('MongoDB connected successfully');
+    console.log("Server running in : http://localhost:"+process.env.PORT);
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+  });
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
