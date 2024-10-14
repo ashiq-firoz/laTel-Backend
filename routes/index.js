@@ -7,10 +7,13 @@ const accountController = require('../controllers/accountController');
 const paymentController = require('../controllers/paymentController');
 const subscriptionController = require('../controllers/subscriptionController');
 const offerController = require('../controllers/offerController');
+const usersController = require("../controllers/userController");
 
 router.get("/",(req,res)=>{
   res.render("index",{title:"OneConnect"})
 })
+
+router.post('/register', usersController.registerUser);
 
 // User login (via OTP or password)
 router.post('/login', authController.login);
