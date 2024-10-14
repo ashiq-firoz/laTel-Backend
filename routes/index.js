@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-// Import necessary controllers (you'll need to create these)
-const authController = require('./controllers/authController');
-const accountController = require('./controllers/accountController');
-const paymentController = require('./controllers/paymentController');
-const subscriptionController = require('./controllers/subscriptionController');
-const offerController = require('./controllers/offerController');
+
+const authController = require('../controllers/authController');
+const accountController = require('../controllers/accountController');
+const paymentController = require('../controllers/paymentController');
+const subscriptionController = require('../controllers/subscriptionController');
+const offerController = require('../controllers/offerController');
 
 router.get("/",(req,res)=>{
   res.render("index",{title:"OneConnect"})

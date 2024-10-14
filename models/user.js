@@ -1,25 +1,40 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
-// Define the User schema
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true, // Ensures the name is provided
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true, // Ensures the email is unique
-    match: /.+\@.+\..+/ // Simple regex for email validation
-  },
-  phone: {
-    type: String,
-    required: true,
-    match: /^\d{10}$/ // Simple regex for 10-digit phone numbers
-  }
+const UserSchema = new mongoose.Schema({
+    phone: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    balance: {
+        type: Number,
+        default: 0
+    },
+    dataUsage: {
+        type: Number,
+        default: 0
+    },
+    subscription: {
+        type: String,
+        default: 'Basic Plan'
+    }
 });
 
-// Create the User model
-const User = mongoose.model('User', userSchema);
+// Hash the password before saving
+UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+});
 
-module.exports = User;
+UserSchema.methods.matchPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+};
+
+module.exports = mongoose.model('User', UserSchema);
