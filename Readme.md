@@ -79,6 +79,22 @@ Make sure you have the following installed on your machine:
 
   **Response**:
   - On success: Returns a JWT token.
+
+### User Registration
+
+- **POST /register**: Register a new user.
+
+  **Request Body**:
+  ```json
+  {
+    "phone": "1234567890",
+    "password": "securepassword"
+  }
+  ```
+  **Response**
+
+   - 201 Created: {"message": "User registered successfully"}
+   - 400 Bad Request: {"message": "User already exists"} (if the phone number is already registered)
   
 ### Account Management
 
