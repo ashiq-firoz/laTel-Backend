@@ -19,22 +19,22 @@ router.post('/register', usersController.registerUser);
 router.post('/login', authController.login);
 
 // Dashboard - View account balance and data usage
-router.get('/dashboard', accountController.getDashboardInfo);
+router.get('/dashboard', accountController.authenticateToken,accountController.getDashboardInfo);
 
 // View account balance (as a separate route for balance-specific requests)
-router.get('/balance', accountController.getBalance);
+router.get('/balance', accountController.authenticateToken,accountController.getBalance);
 
 // Track data usage
-router.get('/data-usage', accountController.getDataUsage);
+router.get('/data-usage', accountController.authenticateToken,accountController.getDataUsage);
 
 // Bill payment
-router.post('/pay-bill', paymentController.payBill);
+router.post('/pay-bill', accountController.authenticateToken,paymentController.payBill);
 
 // Subscription management - modify telecom plan, renew subscription
-router.post('/manage-subscription', subscriptionController.modifySubscription);
+router.post('/manage-subscription', accountController.authenticateToken,subscriptionController.modifySubscription);
 
 // View exclusive offers and promotions
-router.get('/offers', offerController.getOffers);
+router.get('/offers', accountController.authenticateToken,offerController.getOffers);
 
 // Support routes (optional based on UI, if integrated via API)
 router.get('/support', (req, res) => {
