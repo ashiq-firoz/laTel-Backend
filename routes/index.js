@@ -18,6 +18,8 @@ router.post('/register', usersController.registerUser);
 // User login (via OTP or password)
 router.post('/login', authController.login);
 
+router.post("/getOTP", usersController.sendOtp);
+
 // Dashboard - View account balance and data usage
 router.get('/dashboard', accountController.authenticateToken,accountController.getDashboardInfo);
 
