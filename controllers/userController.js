@@ -1,5 +1,5 @@
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
+const Wallet = require('../models/wallet');
 const User = require('../models/user'); 
 const crypto = require('crypto'); 
 
@@ -8,8 +8,67 @@ const generateOtp = () => {
 };
 
 
+
+
+// Fetch wallet details for an authenticated user
+exports.getWallet = async (req, res) => {
+  try {
+    // Find the user by ID (set by authenticateToken middleware)
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the wallet associated with the user's phone or unique identifier
+    const wallet = await Wallet.findOne({ address: user.phone }); // Adjust if wallets are associated differently
+    if (!wallet) {
+      return res.status(404).json({ message: 'Wallet not found' });
+    }
+
+    // Send the wallet information (address and balance)
+    res.json({ address: wallet.address, balance: wallet.balance });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Add balance to the authenticated user's wallet
+exports.addBalance = async (req, res) => {
+  const { amount } = req.body;
+
+  // Validate that the amount is a positive number
+  if (!amount || amount <= 0) {
+    return res.status(400).json({ message: 'Invalid amount. Must be greater than zero.' });
+  }
+
+  try {
+    // Find the user by ID
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the wallet associated with the user
+    const wallet = await Wallet.findOne({ address: user.phone });
+    if (!wallet) {
+      return res.status(404).json({ message: 'Wallet not found' });
+    }
+
+    // Add the amount to the wallet balance
+    wallet.balance += amount;
+    await wallet.save(); // Save the updated wallet
+
+    res.json({ message: 'Balance added successfully', balance: wallet.balance });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
 // Register a new user
-exports.registerUser = async (req, res) => {
+exports.registerUser = async (req, res) => {  
   try {
     const { phone, password,email } = req.body;
 
@@ -43,6 +102,7 @@ exports.sendOtp = async (req, res) => {
   try {
     // Find the user by email
     const user = await User.findOne({ phone });
+    
 
     const email = user.email;
 

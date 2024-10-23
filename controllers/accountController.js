@@ -37,6 +37,8 @@ exports.getDashboardInfo = async (req, res) => {
     }
 
     res.json({
+      name : user.name,
+      current_plan : user.current_plan,
       phone: user.phone,
       balance: user.balance,
       dataUsage: user.dataUsage,

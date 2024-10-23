@@ -67,6 +67,18 @@ Make sure you have the following installed on your machine:
 
 ### Authentication
 
+- **POST /getOTP**: Generate OTP.
+  
+  **Request Body**:
+  ```json
+  {
+    "phone": "1234567890",
+  }
+  ```
+
+  **Response**:
+  - On success: Returns success message.
+
 - **POST /login**: Login with phone and password or OTP.
   
   **Request Body**:

@@ -26,6 +26,9 @@ router.get('/dashboard', accountController.authenticateToken,accountController.g
 // View account balance (as a separate route for balance-specific requests)
 router.get('/balance', accountController.authenticateToken,accountController.getBalance);
 
+router.get('/wallet', accountController.authenticateToken, usersController.getWallet); // Get wallet details
+router.post('/wallet/add-balance', accountController.authenticateToken, usersController.addBalance); // Add balance to wallet
+
 // Track data usage
 router.get('/data-usage', accountController.authenticateToken,accountController.getDataUsage);
 
