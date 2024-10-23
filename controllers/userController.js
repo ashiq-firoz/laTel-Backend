@@ -8,7 +8,53 @@ const generateOtp = () => {
 };
 
 
+exports.getUser = async (req,res)=>{
+  try{
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
+    res.json({name:user.name,email:user.email});
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.updateUser = async (req, res) => {
+  try {
+    // Find user by ID from the request
+    const user = await User.findById(req.user.id);
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update user fields with the data provided in the request body
+    const { name, email } = req.body; // Expect phone and email in the request body
+
+    // Optionally validate the incoming data here...
+
+    // Update user properties
+    if (name) user.name = name;
+    if (email) user.email = email;
+
+    // Save the updated user
+    await user.save();
+
+    // Respond with the updated user's phone and email
+    res.json({
+      name: user.name,
+      email: user.email,
+    });
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 // Fetch wallet details for an authenticated user
 exports.getWallet = async (req, res) => {

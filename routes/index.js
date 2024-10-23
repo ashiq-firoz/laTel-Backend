@@ -23,6 +23,12 @@ router.post("/getOTP", usersController.sendOtp);
 // Dashboard - View account balance and data usage
 router.get('/dashboard', accountController.authenticateToken,accountController.getDashboardInfo);
 
+router.get("/getUser",accountController.authenticateToken,usersController.getUser);
+
+router.post("/updateUser",accountController.authenticateToken,usersController.updateUser);
+
+router.post("/renew",accountController.authenticateToken,subscriptionController.renewPlan);
+
 // View account balance (as a separate route for balance-specific requests)
 router.get('/balance', accountController.authenticateToken,accountController.getBalance);
 
