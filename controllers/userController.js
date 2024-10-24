@@ -116,7 +116,7 @@ exports.addBalance = async (req, res) => {
 // Register a new user
 exports.registerUser = async (req, res) => {  
   try {
-    const { phone, password,email } = req.body;
+    const { phone, password,email,name } = req.body;
 
     // Check if the user already exists
     let user = await User.findOne({ phone });
@@ -128,7 +128,8 @@ exports.registerUser = async (req, res) => {
     user = new User({
       phone,
       password,
-      email
+      email,
+      name
     });
 
     // Save the user in the database
